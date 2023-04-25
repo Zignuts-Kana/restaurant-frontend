@@ -11,9 +11,20 @@ import {
   ListItem,
   ListIcon,
   Button,
+  Container,
+  Flex,
+  Wrap,
+  WrapItem,
+  IconButton,
+  FormControl,
+  FormLabel,
+  InputGroup,
+  InputLeftElement,
+  Input,
+  Textarea,
 } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
-import {dataState} from "../../context";
+import { dataState } from "../../context";
 
 function PriceWrapper({ children }) {
   return (
@@ -40,64 +51,79 @@ export default function ThreeTierPricing() {
     <Box py={12}>
       <VStack spacing={2} textAlign="center">
         <Heading as="h1" fontSize="4xl">
-          Plans that fit your need
+          Order Checkout Page
         </Heading>
         <Text fontSize="lg" color={"gray.500"}>
-          Start with 14-day free trial. No credit card needed. Cancel at
-          anytime.
+          By definition, a checkout page is the page(s) related to payment and
+          shipping/billing details on an ecommerce store. The checkout page
+          gives customers the opportunity to enter payment details and complete
+          their order.
         </Text>
       </VStack>
       <Stack
         direction={{ base: "column", md: "row" }}
         textAlign="center"
-        justify="center"
-        spacing={{ base: 4, lg: 10 }}
+        justify="space-around"
+        spacing={{ base: 4, lg: 8 }}
         py={10}
       >
-        <PriceWrapper>
-          <Box py={4} px={12}>
-            <Text fontWeight="500" fontSize="2xl">
-              Hobby
-            </Text>
-            <HStack justifyContent="center">
-              <Text fontSize="3xl" fontWeight="600">
-                $
-              </Text>
-              <Text fontSize="5xl" fontWeight="900">
-                79
-              </Text>
-              <Text fontSize="3xl" color="gray.500">
-                /month
-              </Text>
-            </HStack>
-          </Box>
-          <VStack
-            bg={useColorModeValue("gray.50", "gray.700")}
-            py={4}
-            borderBottomRadius={"xl"}
+        <Flex>
+          <Box
+            bg="#02054B"
+            color="white"
+            borderRadius="lg"
+            m={{ sm: 4, md: 5, lg: 6 }}
+            p={{ sm: 4, md: 5, lg: 8 }}
           >
-            <List spacing={3} textAlign="start" px={12}>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                unlimited build minutes
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                Lorem, ipsum dolor.
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                5TB Lorem, ipsum dolor.
-              </ListItem>
-            </List>
-            <Box w="80%" pt={7}>
-              <Button w="full" colorScheme="red" variant="outline">
-                Start trial
-              </Button>
+            <Box>
+              <Wrap spacing={{ base: 20, sm: 3, md: 5, lg: 20 }}>
+                <WrapItem>
+                  <Box bg="white" borderRadius="lg">
+                    <Box m={8} color="#0B0E3F">
+                      <VStack spacing={5}>
+                      <FormControl id="name">
+                          <FormLabel>Order Name</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement pointerEvents="none" />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id="name">
+                          <FormLabel>Address 1</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement pointerEvents="none" />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id="name">
+                          <FormLabel>Address 2</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement pointerEvents="none" />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id="name">
+                          <FormLabel>State</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement pointerEvents="none" />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                        <FormControl id="name">
+                          <FormLabel>Country</FormLabel>
+                          <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement pointerEvents="none" />
+                            <Input type="text" size="md" />
+                          </InputGroup>
+                        </FormControl>
+                      </VStack>
+                    </Box>
+                  </Box>
+                </WrapItem>
+              </Wrap>
             </Box>
-          </VStack>
-        </PriceWrapper>
-
+          </Box>
+        </Flex>
         <PriceWrapper>
           <Box position="relative">
             <Box
@@ -116,7 +142,7 @@ export default function ThreeTierPricing() {
                 fontWeight="600"
                 rounded="xl"
               >
-                Most Popular
+                Cart  Checkout
               </Text>
             </Box>
             <Box py={4} px={12}>
@@ -164,54 +190,11 @@ export default function ThreeTierPricing() {
               </List>
               <Box w="80%" pt={7}>
                 <Button w="full" colorScheme="red">
-                  Start trial
+                  Place Order
                 </Button>
               </Box>
             </VStack>
           </Box>
-        </PriceWrapper>
-        <PriceWrapper>
-          <Box py={4} px={12}>
-            <Text fontWeight="500" fontSize="2xl">
-              Scale
-            </Text>
-            <HStack justifyContent="center">
-              <Text fontSize="3xl" fontWeight="600">
-                $
-              </Text>
-              <Text fontSize="5xl" fontWeight="900">
-                349
-              </Text>
-              <Text fontSize="3xl" color="gray.500">
-                /month
-              </Text>
-            </HStack>
-          </Box>
-          <VStack
-            bg={useColorModeValue("gray.50", "gray.700")}
-            py={4}
-            borderBottomRadius={"xl"}
-          >
-            <List spacing={3} textAlign="start" px={12}>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                unlimited build minutes
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                Lorem, ipsum dolor.
-              </ListItem>
-              <ListItem>
-                <ListIcon as={FaCheckCircle} color="green.500" />
-                5TB Lorem, ipsum dolor.
-              </ListItem>
-            </List>
-            <Box w="80%" pt={7}>
-              <Button w="full" colorScheme="red" variant="outline">
-                Start trial
-              </Button>
-            </Box>
-          </VStack>
         </PriceWrapper>
       </Stack>
     </Box>

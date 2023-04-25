@@ -136,7 +136,7 @@ export default function ProductSimple({ menuItem, images ,setStatus}) {
           <Text color={"gray.500"} fontSize={"sm"} textTransform={"uppercase"}>
             {menuItem.attributes.name}
           </Text>
-          <Heading fontSize={"l"} fontFamily={"body"} fontWeight={400}>
+          <Heading fontSize={"sm"} fontFamily={"body"} fontWeight={400}>
             {menuItem.attributes.description}
           </Heading>
           <Stack direction={"row"} align={"center"}>

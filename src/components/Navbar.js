@@ -74,7 +74,9 @@ export default function Navbar({ status }) {
   };
   const fetchData = async (id) => {
     const { data } = await axios.get(
-      `http://localhost:1337/api/restaurants/${router.query.id ? router.query.id : parseInt(resId)}`
+      `http://localhost:1337/api/restaurants/${
+        router.query.id ? router.query.id : parseInt(resId)
+      }`
     );
     setRestData(data);
   };
@@ -88,7 +90,10 @@ export default function Navbar({ status }) {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
-
+  const logOutClicked = (e) => {
+    localStorage.removeItem("userInfo");
+    location.reload();
+  };
   const getTotal = () => {
     let total = 0;
     const cartData = JSON.parse(localStorage.getItem("cart"));
@@ -119,7 +124,9 @@ export default function Navbar({ status }) {
             <Link href={`/restaurant/${resId}`}>
               <Box textTransform={"uppercase"}>
                 {console.log(restData)}
-                {restData && restData.data.attributes.name ? restData.data.attributes.name : "Home"}
+                {restData && restData.data.attributes.name
+                  ? restData.data.attributes.name
+                  : "Home"}
               </Box>
             </Link>
           )}
@@ -264,7 +271,7 @@ export default function Navbar({ status }) {
                     <MenuDivider />
                     <MenuItem>Your Servers</MenuItem>
                     <MenuItem>Account Settings</MenuItem>
-                    <MenuItem>Logout</MenuItem>
+                    <MenuItem onClick={logOutClicked}>Logout</MenuItem>
                   </MenuList>
                 </Menu>
               ) : (
@@ -279,7 +286,7 @@ export default function Navbar({ status }) {
                     fontSize={"sm"}
                     fontWeight={400}
                     variant={"link"}
-                    href={"#"}
+                    href={"/singin"}
                   >
                     Sign In
                   </Button>
@@ -290,7 +297,7 @@ export default function Navbar({ status }) {
                     fontWeight={600}
                     color={"white"}
                     bg={"pink.400"}
-                    href={"#"}
+                    href={"/singup"}
                     _hover={{
                       bg: "pink.300",
                     }}
