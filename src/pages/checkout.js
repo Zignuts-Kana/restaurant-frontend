@@ -27,6 +27,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import { dataState } from "../../context";
 import axios from "axios";
 import useLocalStorage from "@/utils";
+import { useRouter } from "next/router";
 
 function PriceWrapper({ children }) {
   return (
@@ -50,6 +51,7 @@ export default function checkout({ status }) {
   // const [userCart, setCartData] = useLocalStorage("cart", []);
   const [restData, setRestData] = useState();
   const [total, setTotal] = useState(0);
+  console.log('resId',resId)
   const fetchData = async (id) => {
     const { data } = await axios.get(
       `http://localhost:1337/api/restaurants/${parseInt(resId)}`
@@ -78,8 +80,41 @@ export default function checkout({ status }) {
   }, []);
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart"));
-    setCartData(cartData)
-  },[changeNav])
+    setCartData(cartData);
+  }, [changeNav]);
+
+  const router = useRouter();
+  const placeOrderClicked = (e) => {
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+    const token = localStorage.getItem("token");
+    const restaurant = resId;
+
+    const options = {
+      method: "POST",
+      url: `http://localhost:1337/api/restaurant/order`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        data: {
+          restaurant,
+          items: cartData,
+        },
+      },
+    };
+    axios
+      .request(options)
+      .then((response) => {
+        if (response.status == 200) {
+          localStorage.removeItem('cart')
+          router.push(`/thankyou/${response.data.id}`);
+        }
+      })
+      .catch((error) => {
+        router.push("/failed");
+        console.log(error)
+      });
+  };
 
   return (
     <Box py={12}>
@@ -202,15 +237,21 @@ export default function checkout({ status }) {
               <List spacing={3} textAlign="start" px={12}>
                 {userCart &&
                   userCart.map((item) => {
-                    console.log(`${item.quantity} X ${item.name} OF ${item.price}`);
-                   return <ListItem>
-                      <ListIcon as={FaCheckCircle} color="green.500" />
-                      {item.quantity} X <strong>{item.name.toUpperCase()}</strong> OF {item.price}
-                    </ListItem>;
+                    console.log(
+                      `${item.quantity} X ${item.name} OF ${item.price}`
+                    );
+                    return (
+                      <ListItem>
+                        <ListIcon as={FaCheckCircle} color="green.500" />
+                        {item.quantity} X{" "}
+                        <strong>{item.name.toUpperCase()}</strong> OF{" "}
+                        {item.price}
+                      </ListItem>
+                    );
                   })}
               </List>
               <Box w="80%" pt={7}>
-                <Button w="full" colorScheme="red">
+                <Button w="full" colorScheme="red" onClick={placeOrderClicked}>
                   Place Order
                 </Button>
               </Box>

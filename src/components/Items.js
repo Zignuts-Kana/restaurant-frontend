@@ -85,7 +85,7 @@ export default function ProductSimple({ menuItem, images ,setStatus}) {
     setStatus(prev=>!prev)
   };
   useEffect(() => {
-    setIsAlready(userCart.some((a) => a.menuItem === menuItem.id));
+    setIsAlready(userCart && userCart.some((a) => a.menuItem === menuItem.id));
     const cartData = JSON.parse(localStorage.getItem("cart"));
     if (cartData) {
       cartData.map((item) => {
@@ -159,7 +159,7 @@ export default function ProductSimple({ menuItem, images ,setStatus}) {
             <Text textDecoration={"line-through"} color={"gray.600"}></Text>
           </Stack>
           {/* {console.log(userCart.some((a) => a.menuItem !== menuItem.id))} */}
-          {userCart.length > 0 ? (
+          {userCart && userCart.length > 0 ? (
             !isAlready ? (
               <Button
                 as={"a"}

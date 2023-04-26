@@ -32,15 +32,14 @@ export default function VerifyEmailForm() {
         },
       })
       .then((response) => {
-        console.log(response.data.authToken);
         if (response.status === 200) {
-          setToken(response.data.authToken.toString());
+          localStorage.setItem('token', response.data.token);
           router.push("/checkout");
         }
       })
       .catch((error) => {
         toast({
-          title: `${JSON.stringify(error.response.data.message)}`,
+          title: `${JSON.stringify(error)}`,
           status: "error",
           duration: 1000,
         });

@@ -31,22 +31,26 @@ export default function SignupCard() {
   const router = useRouter();
   const handleFormSubmit = async (values) => {
     await axios
-      .post(
-        `http://localhost:1337/api/customers`
-        ,{
-          data:{...values}
-        }
-      )
+      .post(`http://localhost:1337/api/customers`, {
+        data: { ...values },
+      })
       .then((response) => {
         if (response.status === 200) {
           toast({
-            title: "OTP sent successfully"+` ${response.data.data.attributes.otp}`,
+            title:
+              "OTP sent successfully" + ` ${response.data.data.attributes.otp}`,
             status: "success",
             duration: 1000,
             isClosable: true,
           });
-          setUser(response.data.data.attributes)
-          router.push('/verifyotp')
+          setUser({
+            lastName: response.data.data.attributes.lastName,
+            firstName: response.data.data.attributes.firstName,
+            email: response.data.data.attributes.email,
+            phoneNumber: response.data.data.attributes.phoneNumber,
+            otp:response.data.data.attributes.otp,
+          });
+          router.push("/verifyotp");
         }
       })
       .catch((error) => {
@@ -147,7 +151,7 @@ export default function SignupCard() {
               <Stack pt={6}>
                 <Text align={"center"}>
                   Already a user?{" "}
-                  <Link color={"blue.400"} href={"/singin"}>
+                  <Link color={"blue.400"} href={"/signin"}>
                     Login
                   </Link>
                 </Text>

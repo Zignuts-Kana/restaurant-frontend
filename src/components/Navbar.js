@@ -42,6 +42,7 @@ import { dataState } from "../../context";
 
 export default function Navbar({ status }) {
   const router = useRouter();
+  const [isLogin, setIsLogin] = useState(false);
   const [userCart, setCartData] = useLocalStorage("cart", []);
   const [userData, setUserData] = useLocalStorage("userInfo", "");
   const { isHome, setIsHome, resId, setResId, setChangeNav } = dataState();
@@ -92,6 +93,7 @@ export default function Navbar({ status }) {
   const finalRef = React.useRef(null);
   const logOutClicked = (e) => {
     localStorage.removeItem("userInfo");
+    localStorage.removeItem("token");
     location.reload();
   };
   const getTotal = () => {
@@ -113,14 +115,24 @@ export default function Navbar({ status }) {
     setData(JSON.parse(localStorage.getItem("cart")));
   }, [status, userCart]);
 
+  useEffect(() => {
+    if (localStorage.getItem("token") === null) {
+      setIsLogin(false);
+    } else {
+      setIsLogin(true);
+    }
+  }, [router.pathname]);
+
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           {isHome ? (
-            <Box textTransform={"uppercase"}>
-              {restData && restData.data.attributes.name}
-            </Box>
+            <Link href={`/restaurant/${resId}`}>
+              <Box textTransform={"uppercase"}>
+                {restData && restData.data.attributes.name}
+              </Box>
+            </Link>
           ) : (
             <Link href={`/restaurant/${resId}`}>
               <Box textTransform={"uppercase"}>
@@ -239,7 +251,7 @@ export default function Navbar({ status }) {
                   </ModalFooter>
                 </ModalContent>
               </Modal>
-              {userData !== "" ? (
+              {isLogin ? (
                 <Menu>
                   <MenuButton
                     as={Button}
@@ -286,7 +298,7 @@ export default function Navbar({ status }) {
                     fontSize={"sm"}
                     fontWeight={400}
                     variant={"link"}
-                    href={"/singin"}
+                    href={"/signin"}
                   >
                     Sign In
                   </Button>
@@ -297,7 +309,7 @@ export default function Navbar({ status }) {
                     fontWeight={600}
                     color={"white"}
                     bg={"pink.400"}
-                    href={"/singup"}
+                    href={"/signup"}
                     _hover={{
                       bg: "pink.300",
                     }}
