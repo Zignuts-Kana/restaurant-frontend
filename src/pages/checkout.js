@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Box,
   Stack,
@@ -25,6 +25,8 @@ import {
 } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { dataState } from "../../context";
+import axios from "axios";
+import useLocalStorage from "@/utils";
 
 function PriceWrapper({ children }) {
   return (
@@ -41,11 +43,43 @@ function PriceWrapper({ children }) {
   );
 }
 
-export default function ThreeTierPricing() {
-  const { isHome, setIsHome } = dataState();
+export default function checkout({ status }) {
+  const { isHome, setIsHome, resId, setResId, changeNav, setChangeNav } =
+    dataState();
+  const [userCart, setCartData] = useState();
+  // const [userCart, setCartData] = useLocalStorage("cart", []);
+  const [restData, setRestData] = useState();
+  const [total, setTotal] = useState(0);
+  const fetchData = async (id) => {
+    const { data } = await axios.get(
+      `http://localhost:1337/api/restaurants/${parseInt(resId)}`
+    );
+    setRestData(data);
+  };
+  useEffect(() => {
+    fetchData(resId);
+  }, [resId]);
+
+  const getTotal = () => {
+    let total = 0;
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+    if (cartData) {
+      cartData.forEach((cartItem) => {
+        total = total + cartItem.price * cartItem.quantity;
+      });
+    }
+    setTotal(total);
+  };
+  useEffect(() => {
+    getTotal();
+  }, [userCart, status, changeNav]);
   useEffect(() => {
     setIsHome(false);
   }, []);
+  useEffect(() => {
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+    setCartData(cartData)
+  },[changeNav])
 
   return (
     <Box py={12}>
@@ -81,7 +115,7 @@ export default function ThreeTierPricing() {
                   <Box bg="white" borderRadius="lg">
                     <Box m={8} color="#0B0E3F">
                       <VStack spacing={5}>
-                      <FormControl id="name">
+                        <FormControl id="name">
                           <FormLabel>Order Name</FormLabel>
                           <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement pointerEvents="none" />
@@ -142,22 +176,21 @@ export default function ThreeTierPricing() {
                 fontWeight="600"
                 rounded="xl"
               >
-                Cart  Checkout
+                Cart Checkout
               </Text>
             </Box>
-            <Box py={4} px={12}>
-              <Text fontWeight="500" fontSize="2xl">
-                Growth
+            <Box py={8} px={12}>
+              <Text fontWeight="900" fontSize="2xl">
+                {restData && restData.data.attributes.name.toUpperCase()}
               </Text>
               <HStack justifyContent="center">
                 <Text fontSize="3xl" fontWeight="600">
-                  $
-                </Text>
-                <Text fontSize="5xl" fontWeight="900">
-                  149
-                </Text>
-                <Text fontSize="3xl" color="gray.500">
-                  /month
+                  {new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumSignificantDigits: 4,
+                    notation: "standard",
+                  }).format(total)}
                 </Text>
               </HStack>
             </Box>
@@ -167,26 +200,14 @@ export default function ThreeTierPricing() {
               borderBottomRadius={"xl"}
             >
               <List spacing={3} textAlign="start" px={12}>
-                <ListItem>
-                  <ListIcon as={FaCheckCircle} color="green.500" />
-                  unlimited build minutes
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={FaCheckCircle} color="green.500" />
-                  Lorem, ipsum dolor.
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={FaCheckCircle} color="green.500" />
-                  5TB Lorem, ipsum dolor.
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={FaCheckCircle} color="green.500" />
-                  5TB Lorem, ipsum dolor.
-                </ListItem>
-                <ListItem>
-                  <ListIcon as={FaCheckCircle} color="green.500" />
-                  5TB Lorem, ipsum dolor.
-                </ListItem>
+                {userCart &&
+                  userCart.map((item) => {
+                    console.log(`${item.quantity} X ${item.name} OF ${item.price}`);
+                   return <ListItem>
+                      <ListIcon as={FaCheckCircle} color="green.500" />
+                      {item.quantity} X <strong>{item.name.toUpperCase()}</strong> OF {item.price}
+                    </ListItem>;
+                  })}
               </List>
               <Box w="80%" pt={7}>
                 <Button w="full" colorScheme="red">

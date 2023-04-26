@@ -14,10 +14,18 @@ import {
 } from "@chakra-ui/react";
 import useLocalStorage from "@/utils";
 import { useEffect, useState } from "react";
+import { dataState } from "../../context";
 
 export default function ProductSimple({ menuItem, images ,setStatus}) {
+  const { changeNav, setChangeNav } =
+  dataState();
   const [userCart, setCartData] = useLocalStorage("cart", []);
   const [isAlready, setIsAlready] = useState(true);
+  useEffect(() => {
+    const cartData = JSON.parse(localStorage.getItem("cart"));
+    setCartData(cartData)
+    setStatus(prev=>!prev)
+  },[changeNav])
   // const [userCart, setCartData] = useState(
   //   JSON.parse(localStorage.getItem("cart"))
   // );

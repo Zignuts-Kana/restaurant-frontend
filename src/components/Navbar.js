@@ -44,7 +44,7 @@ export default function Navbar({ status }) {
   const router = useRouter();
   const [userCart, setCartData] = useLocalStorage("cart", []);
   const [userData, setUserData] = useLocalStorage("userInfo", "");
-  const { isHome, setIsHome, resId, setResId } = dataState();
+  const { isHome, setIsHome, resId, setResId, setChangeNav } = dataState();
   const [restData, setRestData] = useState();
   const [total, setTotal] = useState(0);
   const [data, setData] = useState(null);
@@ -103,6 +103,7 @@ export default function Navbar({ status }) {
       });
     }
     setTotal(total);
+    setChangeNav((prev) => !prev);
   };
   useEffect(() => {
     getTotal();
@@ -123,7 +124,6 @@ export default function Navbar({ status }) {
           ) : (
             <Link href={`/restaurant/${resId}`}>
               <Box textTransform={"uppercase"}>
-                {console.log(restData)}
                 {restData && restData.data.attributes.name
                   ? restData.data.attributes.name
                   : "Home"}

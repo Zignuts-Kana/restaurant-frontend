@@ -9,7 +9,8 @@ const AuthProvider = ({ children }) => {
   // const [loading, setLoading] = useState(true);
   // const [searchResult, setSearchResult] = useState();
   const [isHome, setIsHome] = useState(true);
-  const [resId, setResId] = useState(1)
+  const [resId, setResId] = useState(1);
+  const [changeNav, setChangeNav] = useState(false);
 
   // const [data, setData] = useState();
   // const [user, setUser] = useLocalStorage("userInfo", "");
@@ -140,7 +141,10 @@ const AuthProvider = ({ children }) => {
       value={{
         isHome,
         setIsHome,
-        resId, setResId
+        resId,
+        setResId,
+        changeNav,
+        setChangeNav,
       }}
     >
       {children}
