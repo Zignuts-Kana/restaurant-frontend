@@ -81,7 +81,7 @@ export default function Navbar({ status, setStatus }) {
   };
   useEffect(() => {
     const id = localStorage.getItem("restaurants");
-    if (!router.query.rid && !id) return;
+    if (!router.query.rid || !id) return;
     if (router.query.rid) {
       fetchData(router.query.rid);
     } else {

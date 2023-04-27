@@ -21,6 +21,7 @@ function Restaurant({setStatus}) {
       `http://localhost:1337/api/categories?populate=*&filters[restaurant]=${router.query.rid}`
     );
     setRestData(data);
+    localStorage.setItem("restaurants", router.query.rid);
   };
   const handleImageFetch = async (catId) => {
     setImages([]);
