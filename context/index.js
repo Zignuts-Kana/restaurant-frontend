@@ -9,7 +9,6 @@ const AuthProvider = ({ children }) => {
   // const [loading, setLoading] = useState(true);
   // const [searchResult, setSearchResult] = useState();
   const [isHome, setIsHome] = useState(true);
-  const [resId, setResId] = useState(1);
   const [changeNav, setChangeNav] = useState(false);
 
   // const [data, setData] = useState();
@@ -141,8 +140,6 @@ const AuthProvider = ({ children }) => {
       value={{
         isHome,
         setIsHome,
-        resId,
-        setResId,
         changeNav,
         setChangeNav,
       }}

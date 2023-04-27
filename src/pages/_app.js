@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }) {
   return (
     <AuthProvider>
       <ChakraProvider>
-        <Navbar status={status} />
+        <Navbar status={status} setStatus={setStatus} />
         <Component setStatus={setStatus} status={status} {...pageProps} />
       </ChakraProvider>
     </AuthProvider>

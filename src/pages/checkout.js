@@ -51,7 +51,6 @@ export default function checkout({ status }) {
   // const [userCart, setCartData] = useLocalStorage("cart", []);
   const [restData, setRestData] = useState();
   const [total, setTotal] = useState(0);
-  console.log('resId',resId)
   const fetchData = async (id) => {
     const { data } = await axios.get(
       `http://localhost:1337/api/restaurants/${parseInt(resId)}`
@@ -106,13 +105,12 @@ export default function checkout({ status }) {
       .request(options)
       .then((response) => {
         if (response.status == 200) {
-          localStorage.removeItem('cart')
           router.push(`/thankyou/${response.data.id}`);
         }
       })
       .catch((error) => {
         router.push("/failed");
-        console.log(error)
+        console.log(error);
       });
   };
 
@@ -194,7 +192,7 @@ export default function checkout({ status }) {
           </Box>
         </Flex>
         <PriceWrapper>
-          <Box position="relative">
+          <Box position="relative" width="450px">
             <Box
               position="absolute"
               top="-16px"
@@ -235,11 +233,10 @@ export default function checkout({ status }) {
               borderBottomRadius={"xl"}
             >
               <List spacing={3} textAlign="start" px={12}>
-                {userCart &&
+                {!userCart ? (
+                  <ListItem>Your cart is empty!</ListItem>
+                ) : (
                   userCart.map((item) => {
-                    console.log(
-                      `${item.quantity} X ${item.name} OF ${item.price}`
-                    );
                     return (
                       <ListItem>
                         <ListIcon as={FaCheckCircle} color="green.500" />
@@ -248,10 +245,16 @@ export default function checkout({ status }) {
                         {item.price}
                       </ListItem>
                     );
-                  })}
+                  })
+                )}
               </List>
               <Box w="80%" pt={7}>
-                <Button w="full" colorScheme="red" onClick={placeOrderClicked}>
+                <Button
+                  w="full"
+                  colorScheme="red"
+                  onClick={placeOrderClicked}
+                  isDisabled={userCart && userCart.length ? false : true}
+                >
                   Place Order
                 </Button>
               </Box>

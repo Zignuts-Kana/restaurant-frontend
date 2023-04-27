@@ -18,7 +18,7 @@ function Restaurant({setStatus}) {
   const [restData, setRestData] = useState();
   const fetchData = async () => {
     const { data } = await axios.get(
-      `http://localhost:1337/api/categories?populate=*&filters[restaurant]=${router.query.id}`
+      `http://localhost:1337/api/categories?populate=*&filters[restaurant]=${router.query.rid}`
     );
     setRestData(data);
   };
@@ -30,10 +30,10 @@ function Restaurant({setStatus}) {
     setImages(data);
   };
   useEffect(() => {
-    if (router.query.id) {
+    if (router.query.rid) {
       fetchData();
     }
-  }, [router.query.id]);
+  }, [router.query.rid]);
 
   return (
     <div>

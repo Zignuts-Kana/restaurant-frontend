@@ -44,3 +44,12 @@ export default function useLocalStorage(key, initialValue) {
   };
   return [storedValue, setValue];
 }
+
+
+// export const GetLocalToken =()=>{
+//   let token='' ;
+//   if (typeof window !== 'undefined') {
+//    token= window.localStorage.getItem("token")
+//   }
+// return token
+// }

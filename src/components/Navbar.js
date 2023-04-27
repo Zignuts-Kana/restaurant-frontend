@@ -40,18 +40,17 @@ import axios from "axios";
 import useLocalStorage from "@/utils";
 import { dataState } from "../../context";
 
-export default function Navbar({ status }) {
+export default function Navbar({ status, setStatus }) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
   const [userCart, setCartData] = useLocalStorage("cart", []);
-  const [userData, setUserData] = useLocalStorage("userInfo", "");
   const { isHome, setIsHome, resId, setResId, setChangeNav } = dataState();
-  const [restData, setRestData] = useState();
+  const [restData, setRestData] = useState(null);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState(null);
-  if (resId && !router.query.id) {
-    router.query.id = resId;
-  }
+  // if (!router.query.id) {
+  //   router.query.id = resId;
+  // }
   const removeQuantity = (e, id) => {
     const cartData = JSON.parse(localStorage.getItem("cart"));
     cartData.forEach((item, index) => {
@@ -75,18 +74,20 @@ export default function Navbar({ status }) {
   };
   const fetchData = async (id) => {
     const { data } = await axios.get(
-      `http://localhost:1337/api/restaurants/${
-        router.query.id ? router.query.id : parseInt(resId)
-      }`
+      `http://localhost:1337/api/restaurants/${id}`
     );
     setRestData(data);
+    localStorage.setItem("restaurants", data.data.id);
   };
   useEffect(() => {
-    if (router.query.id) {
-      fetchData(resId);
-      setResId(router.query.id);
+    const id = localStorage.getItem("restaurants");
+    if (!router.query.rid && !id) return;
+    if (router.query.rid) {
+      fetchData(router.query.rid);
+    } else {
+      fetchData(localStorage.getItem("restaurants"));
     }
-  }, [router.query.id]);
+  }, [router.query.rid]);
 
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -109,12 +110,8 @@ export default function Navbar({ status }) {
   };
   useEffect(() => {
     getTotal();
-  }, [userCart, status]);
-
-  useEffect(() => {
     setData(JSON.parse(localStorage.getItem("cart")));
-  }, [status, userCart]);
-
+  }, [userCart, status]);
   useEffect(() => {
     if (localStorage.getItem("token") === null) {
       setIsLogin(false);
@@ -122,19 +119,18 @@ export default function Navbar({ status }) {
       setIsLogin(true);
     }
   }, [router.pathname]);
-
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           {isHome ? (
-            <Link href={`/restaurant/${resId}`}>
+            <Link href={`/restaurant/${restData && restData.data.id}`}>
               <Box textTransform={"uppercase"}>
                 {restData && restData.data.attributes.name}
               </Box>
             </Link>
           ) : (
-            <Link href={`/restaurant/${resId}`}>
+            <Link href={`/restaurant/${restData && restData.data.id}`}>
               <Box textTransform={"uppercase"}>
                 {restData && restData.data.attributes.name
                   ? restData.data.attributes.name
@@ -159,6 +155,7 @@ export default function Navbar({ status }) {
                 _hover={{
                   bg: "green.300",
                 }}
+                isDisabled={data && data.length ? false : true}
               >
                 Cart
               </Button>
@@ -243,7 +240,7 @@ export default function Navbar({ status }) {
                     <Button colorScheme="red" mr={3} onClick={onClose}>
                       Close
                     </Button>
-                    <Link href={"/checkout"}>
+                    <Link href={isLogin ? "/checkout" : "/signup"}>
                       <Button colorScheme="green" variant="ghost">
                         Checkout
                       </Button>
