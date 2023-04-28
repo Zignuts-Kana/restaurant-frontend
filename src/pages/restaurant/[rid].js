@@ -11,8 +11,10 @@ import {
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { dataState } from "../../../context";
 
 function Restaurant({setStatus}) {
+  const { restId, setRestId } = dataState();
   const router = useRouter();
   const [images, setImages] = useState([]);
   const [restData, setRestData] = useState();
@@ -22,6 +24,7 @@ function Restaurant({setStatus}) {
     );
     setRestData(data);
     localStorage.setItem("restaurants", router.query.rid);
+    setRestId((prev)=>!prev)
   };
   const handleImageFetch = async (catId) => {
     setImages([]);

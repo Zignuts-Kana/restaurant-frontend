@@ -44,13 +44,11 @@ export default function Navbar({ status, setStatus }) {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(false);
   const [userCart, setCartData] = useLocalStorage("cart", []);
-  const { isHome, setIsHome, resId, setResId, setChangeNav } = dataState();
+  const { isHome, setIsHome, restId, setChangeNav } = dataState();
   const [restData, setRestData] = useState(null);
   const [total, setTotal] = useState(0);
   const [data, setData] = useState(null);
-  // if (!router.query.id) {
-  //   router.query.id = resId;
-  // }
+
   const removeQuantity = (e, id) => {
     const cartData = JSON.parse(localStorage.getItem("cart"));
     cartData.forEach((item, index) => {
@@ -63,7 +61,6 @@ export default function Navbar({ status, setStatus }) {
     setCartData(cartData);
   };
   const addQuantity = (e, id) => {
-    // console.log(userCart,id)
     const cartData = JSON.parse(localStorage.getItem("cart"));
     cartData.forEach((item, index) => {
       if (item.menuItem === id) {
@@ -87,8 +84,7 @@ export default function Navbar({ status, setStatus }) {
     } else {
       fetchData(localStorage.getItem("restaurants"));
     }
-  }, [router.query.rid]);
-
+  }, [router.query.rid, restId]);
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef(null);
